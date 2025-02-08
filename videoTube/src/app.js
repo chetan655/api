@@ -1,8 +1,11 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json()); //enable backend to receive json files
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 //routed import
 import userRoutes from "./routes/user.routes.js";

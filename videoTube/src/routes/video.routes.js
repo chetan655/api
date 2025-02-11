@@ -4,6 +4,7 @@ import {
     deleteVideo,
     getAllVideos,
     getParticularVideo,
+    updateVideoDetails,
     uploadVideo,
 } from "../controllers/video.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -30,5 +31,9 @@ videoRouter.route("/upload").post(
 );
 
 videoRouter.route("/delete/:videoId").delete(verifyJWT, deleteVideo);
+
+videoRouter
+    .route("/update/:videoId")
+    .patch(verifyJWT, upload.single("thumbnail"), updateVideoDetails);
 
 export default videoRouter;

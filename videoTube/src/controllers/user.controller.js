@@ -224,6 +224,11 @@ const updateFullNameAndEmail = asyncHandler(async (req, res, next) => {
     if (fullName) updateFields.fullName = fullName;
     if (email) updateFields.email = email;
 
+    if (!updateFields.length)
+        return next(
+            new ApiError(400, "At least one filed is required to update."),
+        );
+
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {

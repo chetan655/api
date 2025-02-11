@@ -141,15 +141,63 @@ const deleteVideo = asyncHandler(async (req, res, next) => {
 
     const deletedVideo = await Video.findByIdAndDelete(videoId);
 
-    if (!deleteVideo) return next(new ApiError(404, "Video not found."));
+    if (!deletedVideo) return next(new ApiError(404, "Video not found."));
 
     // delete from cloudinary
 
     return res.status(200).json({
         success: true,
         message: "Video deleted successfully.",
-        deleteVideo,
     });
 });
 
-export { getAllVideos, getParticularVideo, uploadVideo, deleteVideo };
+// -------------------------------------------------update video title, thumbnail and description controller------------------------
+const updateVideoDetails = asyncHandler(async (req, res, next) => {
+    const { videoId } = req.params;
+    const { title, description } = req.body;
+
+    const fields = {};
+    if (title) fields.title = title;
+    if (description) fields.description = description;
+
+    const thumbnailLocalPath = req?.file?.path;
+
+    let thumbnail;
+    thumbnail = thumbnailLocalPath
+        ? await uploadOnCloudinary(thumbnailLocalPath)
+        : "";
+
+    if (thumbnail) fields.thumbnail = thumbnail?.url;
+
+    // delete old thumbnail from cloudinary
+
+    if (!Object.keys(fields).length)
+        return next(new ApiError(400, "At least one filed is required."));
+
+    const updatedFields = await Video.findByIdAndUpdate(
+        videoId,
+        {
+            $set: fields,
+        },
+        {
+            new: true,
+        },
+    ).select("-videoFile -duration");
+
+    if (!updatedFields)
+        return next(new ApiError(500, "Failed to update fields."));
+
+    return res.status(200).json({
+        success: true,
+        message: "Fields updated successfully.",
+        updatedFields,
+    });
+});
+
+export {
+    getAllVideos,
+    getParticularVideo,
+    uploadVideo,
+    deleteVideo,
+    updateVideoDetails,
+};

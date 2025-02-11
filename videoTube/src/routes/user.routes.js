@@ -35,7 +35,7 @@ userRoutes.route("/login").post(loginUser);
 
 // secured routes
 userRoutes.route("/logout").post(verifyJWT, logoutUser);
-userRoutes.route("/refresh-token").post(refreshAccessToken);
+userRoutes.route("/refresh-token").post(refreshAccessToken); //verify
 userRoutes.route("/change-password").post(verifyJWT, changePassword);
 userRoutes.route("/getCurrent-user").patch(verifyJWT, getCurrentUser);
 userRoutes

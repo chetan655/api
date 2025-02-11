@@ -11,10 +11,11 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const videoRouter = express.Router();
 
+// public routes
 videoRouter.route("/").get(getAllVideos);
-
 videoRouter.route("/:videoId").get(getParticularVideo);
 
+//secured routes
 videoRouter.route("/upload").post(
     verifyJWT,
     upload.fields([
@@ -29,9 +30,7 @@ videoRouter.route("/upload").post(
     ]),
     uploadVideo,
 );
-
 videoRouter.route("/delete/:videoId").delete(verifyJWT, deleteVideo);
-
 videoRouter
     .route("/update/:videoId")
     .patch(verifyJWT, upload.single("thumbnail"), updateVideoDetails);

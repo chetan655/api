@@ -79,6 +79,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
 const loginUser = asyncHandler(async (req, res, next) => {
     const { identifier, password } = req.body; // identifier can be email or username
 
+    // console.log(req.body);
+
     if ([identifier, password].some((i) => i?.trim === ""))
         return next(new ApiError(400, "All field are required."));
 
@@ -411,13 +413,11 @@ const getWatchHistory = asyncHandler(async (req, res, next) => {
     if (!userHistory.length)
         return next(new ApiError(404, "history not found"));
 
-    return res
-        .status(200)
-        .json({
-            success: true,
-            message: "History fetched successfully.",
-            userHistory: userHistory[0],
-        });
+    return res.status(200).json({
+        success: true,
+        message: "History fetched successfully.",
+        userHistory: userHistory[0],
+    });
 });
 
 export {

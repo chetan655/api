@@ -9,9 +9,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //routed import
 import userRoutes from "./routes/user.routes.js";
+import videoRouter from "./routes/video.routes.js";
 
 // routes declaration
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/video", videoRouter);
 
 // Global error handler should be the last middleware to catch errors
 app.use((error, req, res, next) => {
